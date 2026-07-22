@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import type { NextFunction, Request, Response } from 'express';
 import {
   registerUser,
@@ -5,6 +6,7 @@ import {
   issueTokensForUser,
 } from '../services/auth.service.js';
 import logger from '../services/logger.js';
+import prisma from "../utils/prisma.js";
 
 function setRefreshCookie(res: Response, refreshToken: string) {
   res.cookie('refreshToken', refreshToken, {
@@ -74,7 +76,20 @@ export async function login(
 }
 
 
-export function logout(req: Request, res: Response) {
+
+export async function logout(req: Request, res: Response) {
+  const refreshToken = req.cookies?.refreshToken;
+  if (refreshToken) {
+    try {
+      await prisma.refreshToken.deleteMany({
+        where: {
+          tokenHash: await bcrypt.hash(refreshToken, 10),
+        },
+      });
+    } catch (err) {
+      console.error("Failed to delete refresh token from database during logout:", err);
+    }
+  }
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
