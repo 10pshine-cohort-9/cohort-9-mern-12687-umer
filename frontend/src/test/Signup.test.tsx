@@ -65,7 +65,7 @@ describe("Signup", () => {
 
   test("renders the signup form", () => {
     renderSignup();
-    expect(screen.getByText("Create Account")).toBeInTheDocument();
+    expect(screen.getByText("Create Your Account")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Username")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Email")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Password")).toBeInTheDocument();

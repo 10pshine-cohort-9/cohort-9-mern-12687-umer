@@ -22,17 +22,6 @@ vi.mock("react-router-dom", async () => {
 });
 
 
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
-  return {
-    getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => { store[key] = value; },
-    clear: () => { store = {}; },
-  };
-})();
-Object.defineProperty(window, "localStorage", { value: localStorageMock });
-
-
 describe("Login", () => {
   const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
   const setItemSpy = vi.fn();
