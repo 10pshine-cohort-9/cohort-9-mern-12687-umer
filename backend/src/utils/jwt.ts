@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken"
 import process from "process"
 import type { AccessTokenPayload } from "../types/jwt.js";
+import type { JwtPayload } from "jsonwebtoken";
 
 const ACCESS_SECRET = process.env.JWT_SECRET!;
 const REFRESH_SECRET = process.env.REFRESH_SECRET!;
@@ -30,6 +31,6 @@ export function verifyAccessToken(token: string): AccessTokenPayload {
     ) as AccessTokenPayload;
 }
 
-export function verifyRefreshToken(token: string) {
+export function verifyRefreshToken(token: string): string | JwtPayload {
     return jwt.verify(token, REFRESH_SECRET);
 }
