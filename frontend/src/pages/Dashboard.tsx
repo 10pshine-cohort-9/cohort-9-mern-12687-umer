@@ -50,7 +50,7 @@ export default function Dashboard() {
       setSelectedDocument(doc);
       setSelectedId(doc.id);
       setTitle(doc.title ?? "");
-      setContent((doc.content as unknown as JSONContent) ?? EMPTY_CONTENT);
+      setContent((doc.content) ?? EMPTY_CONTENT);
     } catch (err) {
       console.error("Failed to load document", err);
     }
@@ -63,7 +63,7 @@ export default function Dashboard() {
       setSelectedDocument(newDoc);
       setSelectedId(newDoc.id);
       setTitle(newDoc.title ?? "Untitled");
-      setContent((newDoc.content as unknown as JSONContent) ?? EMPTY_CONTENT);
+      setContent((newDoc.content) ?? EMPTY_CONTENT);
     } catch (err) {
       console.error("Failed to create note", err);
     }

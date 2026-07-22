@@ -29,6 +29,14 @@ export default function Sidebar({
         {documents.map((doc) => (
           <li
             key={doc.id}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onSelect(doc.id);
+              }
+            }}
             className={`flex items-center justify-between rounded-lg px-3 py-2 cursor-pointer text-sm ${
               selectedId === doc.id
                 ? 'bg-blue-50 text-blue-700'
@@ -44,6 +52,7 @@ export default function Sidebar({
               }}
               className="ml-2 text-red-400 hover:text-red-600"
               title="Delete note"
+              aria-label="Delete note"
             >
               🗑
             </button>
