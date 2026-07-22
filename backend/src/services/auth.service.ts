@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import { z } from "zod";
 import prisma from "../utils/prisma.js";
 import { AppError } from "../utils/AppError.js";
@@ -50,10 +51,12 @@ export async function issueTokensForUser(user: { id: number; username: string })
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
 
+
+const tokenHash = crypto.createHash("sha256").update(refreshToken).digest("hex");
     await prisma.refreshToken.create({
         data: {
             userId: user.id,
-            tokenHash: await bcrypt.hash(refreshToken, 10),
+            tokenHash: tokenHash,
             expiresAt,
         },
     });

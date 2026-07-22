@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import crypto from "crypto";
 import type { NextFunction, Request, Response } from 'express';
 import {
   registerUser,
@@ -7,6 +7,7 @@ import {
 } from '../services/auth.service.js';
 import logger from '../services/logger.js';
 import prisma from "../utils/prisma.js";
+import { hash } from "crypto";
 
 function setRefreshCookie(res: Response, refreshToken: string) {
   res.cookie('refreshToken', refreshToken, {
@@ -80,10 +81,11 @@ export async function login(
 export async function logout(req: Request, res: Response) {
   const refreshToken = req.cookies?.refreshToken;
   if (refreshToken) {
+    const hashedToken = crypto.createHash("sha256").update(refreshToken).digest("hex");
     try {
       await prisma.refreshToken.deleteMany({
         where: {
-          tokenHash: await bcrypt.hash(refreshToken, 10),
+          tokenHash: hashedToken,
         },
       });
     } catch (err) {
