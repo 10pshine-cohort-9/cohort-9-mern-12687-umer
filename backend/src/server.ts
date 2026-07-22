@@ -9,10 +9,11 @@ async function start() {
         console.log("✅ Prisma connected");
 
         app.listen(port, () => {
-            console.log("Listening");
+            console.log("Listening on port", port);
         });
     } catch (e) {
         console.error("Failed to connect:", e);
+        process.exit(1);
     }
 }
 
