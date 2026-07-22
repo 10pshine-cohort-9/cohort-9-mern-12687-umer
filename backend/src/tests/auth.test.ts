@@ -178,7 +178,7 @@ describe("Auth API", () => {
       });
 
       expect(res.status).to.equal(404);
-      expect(res.body.error.message).to.equal("User not found.");
+      expect(res.body.error.message).to.equal("Invalid Credentials.");
     });
 
     it("should return 404 if user not found (unknown email)", async () => {

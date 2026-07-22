@@ -30,7 +30,7 @@ export async function authenticateUser(identifier: string, password: string) {
     });
 
     if (!user) {
-        throw new AppError(404, "User not found.");
+        throw new AppError(404, "Invalid Credentials.");
     }
 
     const validPassword = await bcrypt.compare(password, user.passwordHash);
