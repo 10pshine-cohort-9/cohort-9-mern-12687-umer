@@ -80,7 +80,7 @@ export async function updateDocumentForUser(
 export async function deleteDocumentForUser(userId: number, documentId: number) {
     const existing = await getDocumentForUser(userId, documentId);
 
-    logger.info(existing);
+    logger.info({ documentId: existing.id, userId }, "Deleting document");
 
     await prisma.document.delete({
         where: {
