@@ -3,8 +3,16 @@ import process from "process"
 import type { AccessTokenPayload } from "../types/jwt.js";
 import type { JwtPayload } from "jsonwebtoken";
 
-const ACCESS_SECRET = process.env.JWT_SECRET!;
-const REFRESH_SECRET = process.env.REFRESH_SECRET!;
+function requireEnv(name: string): string {
+    const value = process.env[name];
+    if (!value) {
+        throw new Error(`Missing required environment variable: ${name}`);
+    }
+    return value;
+}
+
+const ACCESS_SECRET = requireEnv("JWT_SECRET");
+const REFRESH_SECRET = requireEnv("REFRESH_SECRET");
 
 export function createAccessToken(payload: {userId: string, username: string}) {
     const {userId, username} = payload;
