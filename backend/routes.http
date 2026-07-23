@@ -1,0 +1,25 @@
+GET http://localhost:3000/health
+
+###
+
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "umersafee",
+    "email": "muhammadumersafee@gmail.com",
+    "password": "1234567890"
+}
+
+###
+
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "identifier": "umersafee",
+    "password": "1234567890"
+}
+
+### 
+
