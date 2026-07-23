@@ -10,7 +10,6 @@ export default function Login() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       const data = await handleUserLogin(identifier, password);
       localStorage.setItem("accessToken", data.accessToken);
@@ -21,13 +20,13 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#1e2030] flex items-center justify-center px-4 font-sans">
       <form
         onSubmit={submit}
-        className="w-full max-w-md rounded-xl bg-white shadow-xl p-8 space-y-6"
+        className="w-full max-w-md rounded-2xl bg-white shadow-2xl p-8 space-y-6"
       >
         <div>
-          <h1 className="text-3xl font-bold text-slate-800">Welcome Back</h1>
+          <h1 className="text-3xl font-extrabold text-slate-800">Welcome Back</h1>
           <p className="text-slate-500 mt-2">
             Login to continue
           </p>
@@ -39,7 +38,7 @@ export default function Login() {
             placeholder="Username or Email"
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#8aadf4] focus:ring-2 focus:ring-[#8aadf4]/30"
           />
 
           <input
@@ -47,13 +46,13 @@ export default function Login() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#8aadf4] focus:ring-2 focus:ring-[#8aadf4]/30"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700"
+          className="w-full rounded-xl bg-[#c6a0f6] py-3 font-bold text-[#181926] shadow-sm transition hover:bg-[#b7bdf8]"
         >
           Login
         </button>
@@ -62,7 +61,7 @@ export default function Login() {
           Don't have an account?{" "}
           <Link
             to="/signup"
-            className="font-semibold text-blue-600 hover:underline"
+            className="font-bold text-[#8aadf4] hover:underline"
           >
             Signup
           </Link>

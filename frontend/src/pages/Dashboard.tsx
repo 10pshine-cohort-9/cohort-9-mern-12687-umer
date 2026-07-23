@@ -13,7 +13,6 @@ import {
   deleteDocument,
 } from "../handlers/documentHandler";
 
-// Mirrors EMPTY_RICH_TEXT_CONTENT on the backend — keep these in sync.
 const EMPTY_CONTENT: JSONContent = {
   type: "doc",
   content: [{ type: "paragraph" }],
@@ -91,29 +90,22 @@ export default function Dashboard() {
   };
 
   const handleDelete = async (id: number) => {
-  console.log("Delete handler called", id);
-
-  try {
-    console.log("Calling API...");
-    await deleteDocument(id);
-
-    console.log("API succeeded");
-
-    setDocuments((prev) => prev.filter((d) => d.id !== id));
-
-    if (selectedId === id) {
-      setSelectedDocument(null);
-      setSelectedId(null);
-      setTitle("");
-      setContent(EMPTY_CONTENT);
+    try {
+      await deleteDocument(id);
+      setDocuments((prev) => prev.filter((d) => d.id !== id));
+      if (selectedId === id) {
+        setSelectedDocument(null);
+        setSelectedId(null);
+        setTitle("");
+        setContent(EMPTY_CONTENT);
+      }
+    } catch (err) {
+      console.error("Failed to delete note", err);
     }
-  } catch (err) {
-    console.error("Failed to delete note", err);
-  }
-};
+  };
 
   return (
-    <div className="h-screen flex flex-col bg-slate-100">
+    <div className="h-screen flex flex-col bg-[#1e2030] font-sans">
       <Navbar />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
@@ -123,9 +115,10 @@ export default function Dashboard() {
           onNew={handleNewNote}
           onDelete={handleDelete}
         />
-        <main className="flex-1 bg-white overflow-hidden">
+        {/* Soft Latte Canvas */}
+        <main className="flex-1 bg-[#eff1f5] overflow-hidden rounded-tl-[2rem] border-t border-l border-[#363a4f] shadow-[-10px_10px_30px_rgba(0,0,0,0.2)]">
           {loading ? (
-            <div className="flex items-center justify-center h-full text-slate-500">Loading…</div>
+            <div className="flex items-center justify-center h-full text-[#6c6f85] font-medium">Loading…</div>
           ) : selectedDocument ? (
             <NoteEditor
               title={title}
@@ -137,7 +130,7 @@ export default function Dashboard() {
               saving={saving}
             />
           ) : (
-            <div className="flex items-center justify-center h-full text-slate-400">
+            <div className="flex items-center justify-center h-full text-[#6c6f85] font-medium">
               Select or create a note to start writing.
             </div>
           )}

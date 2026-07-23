@@ -7,9 +7,12 @@ export default function ExcalidrawComponent({
   updateAttributes,
   deleteNode,
 }: NodeViewProps) {
+  // Ensure Excalidraw canvas blends perfectly with the Latte background
   const initialData = useRef({
     elements: node.attrs.elements || [],
-    appState: node.attrs.appState || {},
+    appState: node.attrs.appState?.viewBackgroundColor 
+      ? node.attrs.appState 
+      : { ...node.attrs.appState, viewBackgroundColor: "#eff1f5" },
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -35,11 +38,11 @@ export default function ExcalidrawComponent({
   );
 
   return (
-    <NodeViewWrapper className="not-prose relative my-8 overflow-hidden rounded-lg border-2 border-slate-200 group">
+    <NodeViewWrapper className="not-prose relative my-8 overflow-hidden rounded-2xl border-2 border-[#ccd0da] group transition-all hover:border-[#8aadf4]">
       <div
         ref={containerRef}
         tabIndex={0}
-        className="h-[500px] w-full outline-none"
+        className="h-[500px] w-full outline-none bg-[#eff1f5]"
         onKeyDown={(e) => {
           e.stopPropagation();
         }}
@@ -56,7 +59,7 @@ export default function ExcalidrawComponent({
       </div>
       <button
         onClick={deleteNode}
-        className="absolute top-4 right-4 z-50 rounded bg-red-500/90 px-3 py-1.5 text-sm font-medium text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-600 shadow-md"
+        className="absolute top-4 right-4 z-50 rounded-lg bg-[#ed8796] px-4 py-2 text-sm font-bold text-[#181926] opacity-0 transition-opacity group-hover:opacity-100 hover:bg-[#d20f39] shadow-lg"
       >
         Delete Whiteboard
       </button>

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import type { JSONContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -15,6 +15,14 @@ interface NoteEditorProps {
   saving: boolean;
 }
 
+// Map of Tailwind Typography sizes and matching Title sizes
+const proseSizes = ["prose-sm", "prose-base", "prose-lg", "prose-xl", "prose-2xl"];
+const titleSizes = ["text-2xl", "text-3xl", "text-4xl", "text-5xl", "text-6xl"];
+
+// The standard Catppuccin Latte text colors applied to all sizes
+const baseEditorClasses =
+  "max-w-none focus:outline-none min-h-[calc(100vh-220px)] text-[#4c4f69] prose-headings:text-[#4c4f69] prose-p:text-[#4c4f69] prose-strong:text-[#4c4f69] prose-blockquote:text-[#6c6f85] prose-blockquote:border-[#ccd0da] prose-code:text-[#4c4f69] prose-code:bg-[#e6e9ef] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none";
+
 export default function NoteEditor({
   title,
   content,
@@ -24,6 +32,9 @@ export default function NoteEditor({
   onCancel,
   saving,
 }: NoteEditorProps) {
+  // sizeIndex: 1 maps to "prose-base" & "text-3xl" (Default size)
+  const [sizeIndex, setSizeIndex] = useState(1);
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
@@ -33,29 +44,39 @@ export default function NoteEditor({
     content,
     editorProps: {
       attributes: {
-        class:
-          "prose prose-slate max-w-none focus:outline-none min-h-[calc(100vh-220px)] text-[15px] leading-7",
+        class: `prose ${proseSizes[sizeIndex]} ${baseEditorClasses}`,
       },
     },
     onUpdate: ({ editor }) => onContentChange(editor.getJSON()),
   });
 
-  // Sync editor when a different document is selected (external content change),
-  // without clobbering the user mid-keystroke.
+  // Sync editor when a different document is selected
   useEffect(() => {
     if (!editor) return;
     const current = JSON.stringify(editor.getJSON());
     const incoming = JSON.stringify(content);
-    if (current !== incoming) editor.commands.setContent(content, {emitUpdate: false});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (current !== incoming) editor.commands.setContent(content, { emitUpdate: false });
   }, [editor, content]);
+
+  // Dynamically update the editor's Tailwind prose class when the font size changes
+  useEffect(() => {
+    if (editor) {
+      editor.setOptions({
+        editorProps: {
+          attributes: {
+            class: `prose ${proseSizes[sizeIndex]} ${baseEditorClasses}`,
+          },
+        },
+      });
+    }
+  }, [sizeIndex, editor]);
 
   if (!editor) return null;
 
   return (
     <div className="h-full flex flex-col">
       {/* Toolbar */}
-      <div className="sticky top-0 z-10 flex items-center gap-1 border-b border-slate-200 bg-white/80 backdrop-blur px-6 py-2">
+      <div className="sticky top-0 z-10 flex items-center gap-1 border-b border-[#ccd0da] bg-[#eff1f5]/90 backdrop-blur px-8 py-3">
         <ToolbarButton active={editor.isActive("heading", { level: 1 })} onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} label="H1" />
         <ToolbarButton active={editor.isActive("heading", { level: 2 })} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} label="H2" />
         <ToolbarButton active={editor.isActive("heading", { level: 3 })} onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} label="H3" />
@@ -69,39 +90,54 @@ export default function NoteEditor({
         <ToolbarButton active={editor.isActive("orderedList")} onClick={() => editor.chain().focus().toggleOrderedList().run()} label="1. List" />
         <ToolbarButton active={editor.isActive("blockquote")} onClick={() => editor.chain().focus().toggleBlockquote().run()} label="❝" />
         <ToolbarButton active={editor.isActive("codeBlock")} onClick={() => editor.chain().focus().toggleCodeBlock().run()} label="{ }" />
-
+        
         <Divider />
         
-        {/* Add the Excalidraw Injection Button */}
+        {/* Font Sizing Buttons */}
+        <ToolbarButton 
+          onClick={() => setSizeIndex((s) => Math.max(0, s - 1))} 
+          disabled={sizeIndex === 0} 
+          label="A-" 
+          title="Decrease font size"
+        />
+        <ToolbarButton 
+          onClick={() => setSizeIndex((s) => Math.min(proseSizes.length - 1, s + 1))} 
+          disabled={sizeIndex === proseSizes.length - 1} 
+          label="A+" 
+          title="Increase font size"
+        />
+
+        <Divider />
         <ToolbarButton 
           active={editor.isActive("excalidraw")} 
           onClick={() => editor.chain().focus().insertContent({ type: 'excalidraw' }).run()} 
           label="🎨 Whiteboard" 
         />
-        <div className="ml-auto flex items-center gap-2">
-          <button onClick={onCancel} className="rounded-md px-3 py-1.5 text-sm text-slate-500 hover:bg-slate-100">
+        
+        <div className="ml-auto flex items-center gap-3">
+          <button onClick={onCancel} className="rounded-lg px-4 py-2 text-sm font-semibold text-[#6c6f85] hover:bg-[#e6e9ef] hover:text-[#4c4f69] transition-colors">
             Cancel
           </button>
           <button
             onClick={onSave}
             disabled={saving}
-            className="rounded-md bg-slate-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50"
+            className="rounded-lg bg-[#8aadf4] px-5 py-2 text-sm font-bold text-[#181926] shadow-sm hover:bg-[#7dc4e4] disabled:opacity-50 transition-colors"
           >
             {saving ? "Saving…" : "Save"}
           </button>
         </div>
       </div>
 
-      {/* Wide, Obsidian-style writing surface — no boxed textarea */}
       <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto w-full max-w-4xl px-10 py-10">
+        <div className="mx-auto w-full max-w-4xl px-10 py-12">
+          {/* Dynamically size the Title based on sizeIndex */}
           <input
             value={title}
             onChange={(e) => onTitleChange(e.target.value)}
             placeholder="Untitled"
-            className="w-full border-none bg-transparent text-4xl font-bold text-slate-900 placeholder:text-slate-300 focus:outline-none"
+            className={`w-full border-none bg-transparent font-extrabold text-[#4c4f69] placeholder:text-[#9ca0b0] focus:outline-none transition-all ${titleSizes[sizeIndex]}`}
           />
-          <div className="mt-6">
+          <div className="mt-8 transition-all">
             <EditorContent editor={editor} />
           </div>
         </div>
@@ -110,13 +146,34 @@ export default function NoteEditor({
   );
 }
 
-function ToolbarButton({ active, onClick, label, className = "" }: { active: boolean; onClick: () => void; label: string; className?: string }) {
+// Updated ToolbarButton to handle disabled state
+function ToolbarButton({ 
+  active = false, 
+  onClick, 
+  label, 
+  className = "",
+  disabled = false,
+  title
+}: { 
+  active?: boolean; 
+  onClick: () => void; 
+  label: string; 
+  className?: string;
+  disabled?: boolean;
+  title?: string;
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-md px-2.5 py-1.5 text-sm font-medium transition-colors ${
-        active ? "bg-slate-200 text-slate-900" : "text-slate-500 hover:bg-slate-100"
+      disabled={disabled}
+      title={title}
+      className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors ${
+        disabled 
+          ? "opacity-40 cursor-not-allowed text-[#6c6f85]" 
+          : active 
+            ? "bg-[#e6e9ef] text-[#4c4f69]" 
+            : "text-[#6c6f85] hover:bg-[#e6e9ef] hover:text-[#4c4f69]"
       } ${className}`}
     >
       {label}
@@ -125,5 +182,5 @@ function ToolbarButton({ active, onClick, label, className = "" }: { active: boo
 }
 
 function Divider() {
-  return <div className="mx-1 h-5 w-px bg-slate-200" />;
+  return <div className="mx-2 h-6 w-px bg-[#ccd0da]" />;
 }

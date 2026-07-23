@@ -16,10 +16,10 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow-sm px-8 py-4 flex items-center justify-between">
-      <h1 className="text-2xl font-bold text-slate-800">Notes</h1>
+    <nav className="bg-[#1e2030] px-8 py-5 flex items-center justify-between border-b border-[#363a4f]">
+      <h1 className="text-2xl font-black tracking-tight text-[#cad3f5]">Notes</h1>
       <button
-        className="rounded-lg bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+        className="rounded-lg bg-[#ed8796] px-4 py-2 font-bold text-[#181926] transition hover:bg-[#ee99a0]"
         onClick={logout}
       >
         Logout
