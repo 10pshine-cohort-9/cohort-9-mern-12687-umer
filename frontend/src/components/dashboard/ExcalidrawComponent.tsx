@@ -1,12 +1,24 @@
 import { NodeViewWrapper, type NodeViewProps } from "@tiptap/react";
 import { Excalidraw } from "@excalidraw/excalidraw";
-import { useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
-export default function ExcalidrawComponent({ node, updateAttributes, deleteNode }: NodeViewProps) {
+export default function ExcalidrawComponent({
+  node,
+  updateAttributes,
+  deleteNode,
+}: NodeViewProps) {
   const initialData = useRef({
     elements: node.attrs.elements || [],
     appState: node.attrs.appState || {},
   });
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      containerRef.current?.focus();
+    });
+  }, []);
 
   const onChange = useCallback(
     (elements: readonly any[], appState: any) => {
@@ -19,20 +31,28 @@ export default function ExcalidrawComponent({ node, updateAttributes, deleteNode
         },
       });
     },
-    [updateAttributes]
+    [updateAttributes],
   );
 
   return (
-    <NodeViewWrapper className="not-prose relative my-8 overflow-hidden rounded-lg border-2 border-slate-200 group"
-    >
-            <div 
-        className="h-[500px] w-full"
-        onKeyDown={(e) => e.stopPropagation()} 
+    <NodeViewWrapper className="not-prose relative my-8 overflow-hidden rounded-lg border-2 border-slate-200 group">
+      <div
+        ref={containerRef}
+        tabIndex={0}
+        className="h-[500px] w-full outline-none"
+        onKeyDown={(e) => {
+          e.stopPropagation();
+        }}
+        onKeyUp={(e) => {
+          e.stopPropagation();
+        }}
+        onMouseDown={(e) => {
+          e.stopPropagation();
+          containerRef.current?.focus();
+        }}
+        onPointerDown={(e) => e.stopPropagation()}
       >
-        <Excalidraw
-          initialData={initialData.current}
-          onChange={onChange}
-        />
+        <Excalidraw initialData={initialData.current} onChange={onChange} />
       </div>
       <button
         onClick={deleteNode}
