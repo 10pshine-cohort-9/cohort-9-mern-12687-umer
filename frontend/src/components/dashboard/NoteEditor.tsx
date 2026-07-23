@@ -3,6 +3,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import type { JSONContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
+import { ExcalidrawNode } from "../../extensions/ExcalidrawNode";
 
 interface NoteEditorProps {
   title: string;
@@ -27,6 +28,7 @@ export default function NoteEditor({
     extensions: [
       StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
       Placeholder.configure({ placeholder: "Start writing…" }),
+      ExcalidrawNode,
     ],
     content,
     editorProps: {
@@ -68,6 +70,14 @@ export default function NoteEditor({
         <ToolbarButton active={editor.isActive("blockquote")} onClick={() => editor.chain().focus().toggleBlockquote().run()} label="❝" />
         <ToolbarButton active={editor.isActive("codeBlock")} onClick={() => editor.chain().focus().toggleCodeBlock().run()} label="{ }" />
 
+        <Divider />
+        
+        {/* Add the Excalidraw Injection Button */}
+        <ToolbarButton 
+          active={editor.isActive("excalidraw")} 
+          onClick={() => editor.chain().focus().insertContent({ type: 'excalidraw' }).run()} 
+          label="🎨 Whiteboard" 
+        />
         <div className="ml-auto flex items-center gap-2">
           <button onClick={onCancel} className="rounded-md px-3 py-1.5 text-sm text-slate-500 hover:bg-slate-100">
             Cancel
