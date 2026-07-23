@@ -80,8 +80,13 @@ export async function login(
 
 export async function logout(req: Request, res: Response) {
   const refreshToken = req.cookies?.refreshToken;
+
   if (refreshToken) {
-    const hashedToken = crypto.createHash("sha256").update(refreshToken).digest("hex");
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(refreshToken)
+      .digest("hex");
+
     try {
       await prisma.refreshToken.deleteMany({
         where: {
@@ -89,9 +94,18 @@ export async function logout(req: Request, res: Response) {
         },
       });
     } catch (err) {
-      console.error("Failed to delete refresh token from database during logout:", err);
+      console.error(
+        "Failed to delete refresh token from database during logout:",
+        err
+      );
+
+      return res.status(500).json({
+        success: false,
+        msg: "Failed to log out. Please try again.",
+      });
     }
   }
+
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
