@@ -17,7 +17,7 @@ export default function Signup() {
       const data = await handleUserSignup(username, email, password);
       login(data.user, data.accessToken);
       navigate("/dashboard");
-    } catch (err) {
+    } catch (err: any) {
       // Use the normalized error message!
       alert(err instanceof Error ? err.message : "Signup Failed");
     }
