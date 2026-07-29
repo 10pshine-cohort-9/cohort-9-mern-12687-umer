@@ -1,14 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import api, { setAxiosToken, getAxiosToken } from '../api/axios';
 
-// 1. Define the User type based on your backend
 export interface User {
   id: number;
   username: string;
   email: string;
 }
 
-// 2. Define the Context contract
+interface AuthResponse {
+  accessToken: string;
+  user: User;
+}
+
 interface AuthContextValue {
   user: User | null;
   isLoading: boolean;
@@ -20,20 +23,21 @@ export const AuthContext = createContext<AuthContextValue | undefined>(undefined
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
+
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
+
   return context;
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // Start in a loading state
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Unified login function
   const login = (userData: User, token: string) => {
-    setAxiosToken(token); // Save token in memory
-    setUser(userData);    // Save user in context
+    setAxiosToken(token);
+    setUser(userData);
   };
 
   const logout = () => {
@@ -43,10 +47,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const refreshStarted = React.useRef(false);
 
-  useEffect(() => {
+   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await api.get('/auth/refresh');
+        const response = await api.post<{ success: boolean; accessToken?: string; user?: User }>('/auth/refresh');
 
         if (response.data.accessToken && response.data.user) {
           setAxiosToken(response.data.accessToken);
@@ -73,7 +77,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } else {
       setIsLoading(false);
     }
-
   }, []);
 
   return (

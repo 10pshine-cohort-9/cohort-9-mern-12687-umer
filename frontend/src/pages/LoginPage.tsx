@@ -19,7 +19,7 @@ export default function Login() {
       login(data.user, data.accessToken);
       
       navigate("/dashboard");
-    } catch (err: any) {
+    } catch (err) {
       // Use the normalized error message!
       alert(err instanceof Error ? err.message : "Login Failed");
     }
