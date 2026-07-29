@@ -105,7 +105,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-[#1e2030] font-sans">
+    <div className="h-screen flex flex-col bg-[#11111b] font-sans text-[#cdd6f4]">
       <Navbar />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar
@@ -115,10 +115,10 @@ export default function Dashboard() {
           onNew={handleNewNote}
           onDelete={handleDelete}
         />
-        {/* Soft Latte Canvas */}
-        <main className="flex-1 bg-[#eff1f5] overflow-hidden rounded-tl-[2rem] border-t border-l border-[#363a4f] shadow-[-10px_10px_30px_rgba(0,0,0,0.2)]">
+        {/* Clean Mocha Canvas - removed the awkward floating radiuses */}
+        <main className="flex-1 bg-[#1e1e2e] overflow-hidden flex flex-col">
           {loading ? (
-            <div className="flex items-center justify-center h-full text-[#6c6f85] font-medium">Loading…</div>
+            <div className="flex items-center justify-center h-full text-[#a6adc8] font-medium">Loading…</div>
           ) : selectedDocument ? (
             <NoteEditor
               title={title}
@@ -130,7 +130,7 @@ export default function Dashboard() {
               saving={saving}
             />
           ) : (
-            <div className="flex items-center justify-center h-full text-[#6c6f85] font-medium">
+            <div className="flex items-center justify-center h-full text-[#a6adc8] font-medium">
               Select or create a note to start writing.
             </div>
           )}
