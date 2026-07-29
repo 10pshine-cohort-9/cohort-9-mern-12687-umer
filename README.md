@@ -4,6 +4,24 @@ A small full-stack notes application built during my internship. The project use
 
 The current implementation supports rich text editing with TipTap, while the ongoing task is adding Excalidraw whiteboard blocks with full CRUD support.
 
+---
+
+## Screenshots
+
+### Login
+
+![Login](./assets/login.png)
+
+### Register
+
+![Register](./assets/register.png)
+
+### Editor
+
+![Editor](./assets/editor.png)
+
+---
+
 ## Features
 
 * User authentication
@@ -17,7 +35,7 @@ The current implementation supports rich text editing with TipTap, while the ong
 
 Each document owns an ordered list of blocks.
 
-```
+```text
 User
   ↓
 Document
@@ -51,7 +69,7 @@ The backend stores each block's data as JSON, making it straightforward to suppo
 
 ## API
 
-```
+```text
 GET    /documents
 GET    /documents/:id
 
@@ -78,7 +96,7 @@ The goal is to make whiteboards behave like any other document block while keepi
 
 ## Project Structure
 
-```
+```text
 frontend/
 ├── components/
 ├── handlers/

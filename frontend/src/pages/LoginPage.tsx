@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { handleUserLogin } from "../handlers/authHandler";
-import {SiArc, SiArchlinux} from "react-icons/si"
+import { SiArchlinux} from "react-icons/si"
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ export default function Login() {
       >
         <div className="text-center">
           <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-[#181825] border border-[#313244] mb-4 shadow-inner">
-            <span className="text-3xl"><SiArchlinux/></span>
+            <span className="text-3xl"><SiArchlinux color="#f1e7fd" /></span>
           </div>
           <h1 className="text-xl font-mono text-[#cdd6f4]">login</h1>
         </div>
