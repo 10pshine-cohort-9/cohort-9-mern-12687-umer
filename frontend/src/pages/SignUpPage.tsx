@@ -23,58 +23,55 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen bg-[#11111b] flex items-center justify-center px-4 font-sans selection:bg-[#cba6f7] selection:text-[#11111b]">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#89b4fa]/10 blur-[120px] rounded-full pointer-events-none" />
+
       <form
         onSubmit={submit}
-        className="w-full max-w-md rounded-2xl bg-[#1e1e2e] border border-[#313244] shadow-2xl p-8 space-y-6"
+        className="relative w-full max-w-sm rounded-2xl bg-[#1e1e2e]/80 backdrop-blur-xl border border-[#313244] shadow-2xl p-8 space-y-6"
       >
-        <div>
-          <h1 className="text-3xl font-extrabold text-[#cdd6f4]">
-            Create Your Account
-          </h1>
-          <p className="text-[#a6adc8] mt-2">
-            Sign up to get started
-          </p>
+        <div className="text-center">
+          <h1 className="text-xl font-mono text-[#cdd6f4]">register</h1>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 font-mono text-sm">
           <input
-            placeholder="Username"
+            placeholder="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full rounded-xl bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#6c7086] px-4 py-3 outline-none transition focus:border-[#89b4fa] focus:ring-2 focus:ring-[#89b4fa]/20"
+            className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
           />
 
           <input
             type="email"
-            placeholder="Email"
+            placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#6c7086] px-4 py-3 outline-none transition focus:border-[#89b4fa] focus:ring-2 focus:ring-[#89b4fa]/20"
+            className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
           />
 
           <input
             type="password"
-            placeholder="Password"
+            placeholder="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-xl bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#6c7086] px-4 py-3 outline-none transition focus:border-[#89b4fa] focus:ring-2 focus:ring-[#89b4fa]/20"
+            className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full rounded-xl bg-[#cba6f7] py-3 font-bold text-[#11111b] shadow-sm transition hover:bg-[#b4befe]"
+          className="w-full rounded-lg bg-[#89b4fa] py-2.5 font-mono text-sm font-bold text-[#11111b] transition hover:bg-[#b4befe]"
         >
-          Create Account
+          create_user
         </button>
 
-        <p className="text-center text-sm text-[#bac2de]">
-          Already have an account?{" "}
+        <p className="text-center font-mono text-xs text-[#6c7086]">
+          [ have access? ]{" "}
           <Link
             to="/"
-            className="font-bold text-[#89b4fa] hover:text-[#74c7ec] transition-colors"
+            className="text-[#cba6f7] hover:text-[#89b4fa] transition-colors"
           >
-            Login
+            login
           </Link>
         </p>
       </form>

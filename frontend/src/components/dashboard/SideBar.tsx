@@ -17,47 +17,54 @@ export default function Sidebar({
   onDelete,
 }: SidebarProps) {
   return (
-    <div className="w-64 bg-[#181825] border-r border-[#313244] p-4 flex flex-col h-full shrink-0">
-      <button
-        onClick={onNew}
-        className="mb-6 w-full rounded-xl bg-[#cba6f7] px-4 py-3 font-bold text-[#11111b] shadow-sm transition hover:bg-[#b4befe]"
-      >
-        + New Note
-      </button>
+    <div className="w-64 bg-[#181825] border-r border-[#313244] p-3 flex flex-col h-full shrink-0">
+      <div className="mb-4 mt-2 px-2">
+        <button
+          onClick={onNew}
+          className="w-full flex items-center justify-center gap-2 rounded-lg border border-[#cba6f7]/30 bg-[#cba6f7]/10 px-4 py-2 font-mono text-sm text-[#cba6f7] transition-all hover:bg-[#cba6f7]/20 hover:border-[#cba6f7]"
+        >
+          <span>+</span> New Note
+        </button>
+      </div>
 
-      <ul className="flex-1 space-y-1 overflow-y-auto pr-2 custom-scrollbar">
-        {documents.map((doc) => (
-          <li
-            key={doc.id}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onSelect(doc.id);
-              }
-            }}
-            className={`flex items-center justify-between rounded-xl px-4 py-2.5 cursor-pointer text-sm transition-all outline-none ${
-              selectedId === doc.id
-                ? 'bg-[#313244] text-[#89b4fa] font-semibold ring-1 ring-[#45475a]'
-                : 'text-[#bac2de] hover:bg-[#313244] hover:text-[#cdd6f4] focus-visible:ring-1 focus-visible:ring-[#89b4fa]'
-            }`}
-            onClick={() => onSelect(doc.id)}
-          >
-            <span className="truncate flex-1">{doc.title || 'Untitled'}</span>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(doc.id);
-              }}
-              className="ml-2 text-[#f38ba8] opacity-60 hover:opacity-100 hover:text-[#eba0ac] transition-all"
-              title="Delete note"
-              aria-label="Delete note"
+      <div className="px-2 mb-2 font-mono text-[10px] tracking-widest text-[#585b70] uppercase">
+        Explorer
+      </div>
+
+      <ul className="flex-1 space-y-0.5 overflow-y-auto custom-scrollbar pr-1">
+        {documents.map((doc) => {
+          const isActive = selectedId === doc.id;
+          return (
+            <li
+              key={doc.id}
+              role="button"
+              tabIndex={0}
+              className={`group flex items-center justify-between rounded-md px-3 py-2 text-sm transition-all outline-none ${
+                isActive
+                  ? 'bg-[#313244]/50 text-[#cba6f7] font-medium'
+                  : 'text-[#a6adc8] hover:bg-[#313244]/30 hover:text-[#cdd6f4]'
+              }`}
+              onClick={() => onSelect(doc.id)}
             >
-              🗑
-            </button>
-          </li>
-        ))}
+              <div className="flex items-center gap-2 truncate">
+                <span className={`text-xs ${isActive ? 'text-[#cba6f7]' : 'text-[#45475a]'}`}>
+                  {isActive ? '○' : '•'}
+                </span>
+                <span className="truncate">{doc.title || 'untitled.md'}</span>
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(doc.id);
+                }}
+                className="opacity-0 group-hover:opacity-100 text-[#f38ba8] hover:text-[#ffb3c6] transition-all font-mono text-xs"
+                title="Delete note"
+              >
+                x
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

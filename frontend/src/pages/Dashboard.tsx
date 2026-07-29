@@ -1,7 +1,7 @@
 // src/pages/Dashboard.tsx
 import { useState, useEffect } from "react";
 import type { JSONContent } from "@tiptap/react";
-import Navbar from "../components/dashboard/navbar";
+import Navbar from "../components/dashboard/Navbar";
 import Sidebar from "../components/dashboard/SideBar";
 import NoteEditor from "../components/dashboard/NoteEditor";
 import type { Document } from "../types/document";
@@ -105,9 +105,12 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-[#11111b] font-sans text-[#cdd6f4]">
+    // The "Screen" with Crust background and useless gaps
+    <div className="h-screen w-screen flex flex-col gap-4 bg-[#11111b] p-4 font-sans text-[#cdd6f4] selection:bg-[#cba6f7] selection:text-[#11111b]">
       <Navbar />
-      <div className="flex flex-1 overflow-hidden">
+      
+      {/* The main "Tiled Window" */}
+      <div className="flex flex-1 overflow-hidden rounded-2xl border border-[#313244] bg-[#1e1e2e] shadow-[0_8px_30px_rgb(0,0,0,0.5)]">
         <Sidebar
           documents={documents}
           selectedId={selectedId}
@@ -115,10 +118,12 @@ export default function Dashboard() {
           onNew={handleNewNote}
           onDelete={handleDelete}
         />
-        {/* Clean Mocha Canvas - removed the awkward floating radiuses */}
-        <main className="flex-1 bg-[#1e1e2e] overflow-hidden flex flex-col">
+        
+        <main className="flex-1 overflow-hidden relative flex flex-col bg-[#1e1e2e]">
           {loading ? (
-            <div className="flex items-center justify-center h-full text-[#a6adc8] font-medium">Loading…</div>
+            <div className="flex items-center justify-center h-full text-[#7f849c] font-mono text-sm animate-pulse">
+              [ loading_buffer... ]
+            </div>
           ) : selectedDocument ? (
             <NoteEditor
               title={title}
@@ -130,8 +135,9 @@ export default function Dashboard() {
               saving={saving}
             />
           ) : (
-            <div className="flex items-center justify-center h-full text-[#a6adc8] font-medium">
-              Select or create a note to start writing.
+            <div className="flex flex-col items-center justify-center h-full text-[#585b70]">
+              <span className="font-mono text-xl text-[#6c7086] mb-2">~/notes</span>
+              <span className="font-mono text-sm">Select a note to edit</span>
             </div>
           )}
         </main>

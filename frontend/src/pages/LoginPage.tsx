@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { handleUserLogin } from "../handlers/authHandler";
+import {SiArc, SiArchlinux} from "react-icons/si"
 
 export default function Login() {
   const navigate = useNavigate();
@@ -22,49 +23,56 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-[#11111b] flex items-center justify-center px-4 font-sans selection:bg-[#cba6f7] selection:text-[#11111b]">
+      {/* Background ambient glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#cba6f7]/10 blur-[120px] rounded-full pointer-events-none" />
+
       <form
         onSubmit={submit}
-        className="w-full max-w-md rounded-2xl bg-[#1e1e2e] border border-[#313244] shadow-2xl p-8 space-y-6"
+        className="relative w-full max-w-sm rounded-2xl bg-[#1e1e2e]/80 backdrop-blur-xl border border-[#313244] shadow-2xl p-8 space-y-6"
       >
-        <div>
-          <h1 className="text-3xl font-extrabold text-[#cdd6f4]">Welcome Back</h1>
-          <p className="text-[#a6adc8] mt-2">
-            Login to continue
-          </p>
+        <div className="text-center">
+          <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-[#181825] border border-[#313244] mb-4 shadow-inner">
+            <span className="text-3xl"><SiArchlinux/></span>
+          </div>
+          <h1 className="text-xl font-mono text-[#cdd6f4]">login</h1>
         </div>
 
-        <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="Username or Email"
-            value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
-            className="w-full rounded-xl bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#6c7086] px-4 py-3 outline-none transition focus:border-[#89b4fa] focus:ring-2 focus:ring-[#89b4fa]/20"
-          />
+        <div className="space-y-3 font-mono text-sm">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="user"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#cba6f7] focus:ring-1 focus:ring-[#cba6f7]"
+            />
+          </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-xl bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#6c7086] px-4 py-3 outline-none transition focus:border-[#89b4fa] focus:ring-2 focus:ring-[#89b4fa]/20"
-          />
+          <div className="relative">
+            <input
+              type="password"
+              placeholder="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#cba6f7] focus:ring-1 focus:ring-[#cba6f7]"
+            />
+          </div>
         </div>
 
         <button
           type="submit"
-          className="w-full rounded-xl bg-[#cba6f7] py-3 font-bold text-[#11111b] shadow-sm transition hover:bg-[#b4befe]"
+          className="w-full rounded-lg bg-[#cba6f7] py-2.5 font-mono text-sm font-bold text-[#11111b] transition hover:bg-[#b4befe]"
         >
-          Login
+          enter
         </button>
 
-        <p className="text-center text-sm text-[#bac2de]">
-          Don't have an account?{" "}
+        <p className="text-center font-mono text-xs text-[#6c7086]">
+          [ new session? ]{" "}
           <Link
             to="/signup"
-            className="font-bold text-[#89b4fa] hover:text-[#74c7ec] transition-colors"
+            className="text-[#89b4fa] hover:text-[#cba6f7] transition-colors"
           >
-            Signup
+            signup
           </Link>
         </p>
       </form>
