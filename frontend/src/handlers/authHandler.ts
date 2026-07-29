@@ -5,31 +5,47 @@ export const handleUserSignup = async (
   email: string,
   password: string
 ) => {
-  const response = await api.post("/auth/register", {
-    username,
-    email,
-    password,
-  });
+  try {
+    const response = await api.post("/auth/register", {
+      username,
+      email,
+      password,
+    });
 
-  return response.data;
+    return response.data;
+  } catch (err: any) {
+    throw new Error(
+      err.response?.data?.msg || err.message || "Signup failed"
+    );
+  }
 };
 
 export const handleUserLogin = async (
   identifier: string,
   password: string
 ) => {
-  const response = await api.post("/auth/login", {
-    identifier,
-    password,
-  });
+  try {
+    const response = await api.post("/auth/login", {
+      identifier,
+      password,
+    });
 
-  return response.data;
+    return response.data;
+  } catch (err: any) {
+    throw new Error(
+      err.response?.data?.msg || err.message || "Login failed"
+    );
+  }
 };
 
-// src/handlers/authHandler.ts
-
 export const handleUserLogout = async () => {
-  await api.post("/auth/logout");
-
-  localStorage.removeItem("accessToken");
+  try {
+    await api.post("/auth/logout");
+  } catch (err: any) {
+    throw new Error(
+      err.response?.data?.msg || err.message || "Logout failed"
+    );
+  } finally {
+    localStorage.removeItem("accessToken");
+  }
 };
