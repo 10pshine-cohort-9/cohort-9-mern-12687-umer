@@ -14,10 +14,6 @@ export async function authenticate(
         if (!token) {
             throw new AppError(401, "Authentication required.");
         }
-
-        // Anything verifyAccessToken throws (jwt.TokenExpiredError,
-        // jwt.JsonWebTokenError, etc.) is caught below and handed to
-        // errorHandler, which already knows how to format those.
         req.user = verifyAccessToken(token);
 
         next();

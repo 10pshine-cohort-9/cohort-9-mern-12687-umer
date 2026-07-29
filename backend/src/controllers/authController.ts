@@ -117,3 +117,53 @@ export async function logout(req: Request, res: Response) {
     msg: "Logged out successfully.",
   });
 }
+
+export async function refresh(req: Request, res: Response, next: NextFunction) {
+  try {
+    const refreshToken = req.cookies?.refreshToken;
+
+    if (!refreshToken) {
+      return res.status(401).json({ success: false, msg: "No refresh token provided." });
+    }
+
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(refreshToken)
+      .digest("hex");
+
+    const dbToken = await prisma.refreshToken.findFirst({
+      where: {
+        tokenHash: hashedToken,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    if (!dbToken || !dbToken.user) {
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      });
+      return res.status(403).json({ success: false, msg: "Invalid or expired refresh token." });
+    }
+    const { accessToken, refreshToken: newRefreshToken } = await issueTokensForUser(dbToken.user);
+        setRefreshCookie(res, newRefreshToken);
+    // await prisma.refreshToken.delete({
+    //   where: { id: dbToken.id }
+    // });
+
+    return res.json({
+      success: true,
+      accessToken,
+      user: {
+        id: dbToken.user.id,
+        username: dbToken.user.username,
+        email: dbToken.user.email,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
