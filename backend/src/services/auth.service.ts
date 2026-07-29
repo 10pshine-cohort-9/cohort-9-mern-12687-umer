@@ -52,7 +52,7 @@ export async function issueTokensForUser(user: { id: number; username: string })
     expiresAt.setDate(expiresAt.getDate() + 7);
 
 
-const tokenHash = crypto.createHash("sha256").update(refreshToken).digest("hex");
+    const tokenHash = crypto.createHash("sha256").update(refreshToken).digest("hex");
     await prisma.refreshToken.create({
         data: {
             userId: user.id,
