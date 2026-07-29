@@ -2,11 +2,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { handleUserSignup } from "../handlers/authHandler";
-import { useAuth } from "../contexts/AuthContext";
+import { setAxiosToken } from "../api/axios";
 
 export default function Signup() {
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -15,11 +14,11 @@ export default function Signup() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await handleUserSignup(username, email, password);
-      login();
+      const data = await handleUserSignup(username, email, password);
+      setAxiosToken(data.accessToken);
       navigate("/dashboard");
-    } catch (err) {
-      alert(err instanceof Error ? err.message : "Signup Failed");
+    } catch (err: any) {
+      alert(err.response?.data?.msg || "Signup Failed");
     }
   };
 
@@ -36,46 +35,28 @@ export default function Signup() {
         </div>
 
         <div className="space-y-3 font-mono text-sm">
-          <div className="relative">
-            <label htmlFor="signup-username" className="block font-mono text-sm text-[#94e2d5] mb-1">
-              username
-            </label>
-            <input
-              id="signup-username"
-              placeholder="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
-            />
-          </div>
+          <input
+            placeholder="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
+          />
 
-          <div className="relative">
-            <label htmlFor="signup-email" className="block font-mono text-sm text-[#94e2d5] mb-1">
-              email
-            </label>
-            <input
-              id="signup-email"
-              type="email"
-              placeholder="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
-            />
-          </div>
+          <input
+            type="email"
+            placeholder="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
+          />
 
-          <div className="relative">
-            <label htmlFor="signup-password" className="block font-mono text-sm text-[#94e2d5] mb-1">
-              password
-            </label>
-            <input
-              id="signup-password"
-              type="password"
-              placeholder="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
-            />
-          </div>
+          <input
+            type="password"
+            placeholder="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
+          />
         </div>
 
         <button

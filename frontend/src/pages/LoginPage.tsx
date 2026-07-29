@@ -1,13 +1,11 @@
-// src/pages/Login.tsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { handleUserLogin } from "../handlers/authHandler";
-import { useAuth } from "../contexts/AuthContext";
-import { SiArchlinux} from "react-icons/si"
+import { SiArchlinux } from "react-icons/si";
+import { setAxiosToken } from "../api/axios"; // <-- Import the setter
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -15,11 +13,14 @@ export default function Login() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await handleUserLogin(identifier, password);
-      login();
+      const data = await handleUserLogin(identifier, password);
+      
+      // Store the token in-memory instead of localStorage
+      setAxiosToken(data.accessToken);
+      
       navigate("/dashboard");
-    } catch (err) {
-      alert(err instanceof Error ? err.message : "Login Failed");
+    } catch (err: any) {
+      alert(err.response?.data?.msg || "Login Failed");
     }
   };
 
@@ -41,11 +42,7 @@ export default function Login() {
 
         <div className="space-y-3 font-mono text-sm">
           <div className="relative">
-            <label htmlFor="login-identifier" className="block font-mono text-sm text-[#94e2d5] mb-1">
-              identifier
-            </label>
             <input
-              id="login-identifier"
               type="text"
               placeholder="user"
               value={identifier}
@@ -55,11 +52,7 @@ export default function Login() {
           </div>
 
           <div className="relative">
-            <label htmlFor="login-password" className="block font-mono text-sm text-[#94e2d5] mb-1">
-              password
-            </label>
             <input
-              id="login-password"
               type="password"
               placeholder="password"
               value={password}

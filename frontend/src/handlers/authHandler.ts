@@ -2,12 +2,23 @@ import api from "../api/axios";
 
 export interface AuthResponse {
   accessToken: string;
-  user?: {
-    id: string;
+  user: {
+    id: number;
     username: string;
     email: string;
   };
 }
+
+// Helper to normalize Axios errors into standard Error objects
+const normalizeError = (error: any): Error => {
+  if (error.response?.data?.msg) {
+    return new Error(error.response.data.msg);
+  }
+  if (error instanceof Error) {
+    return error;
+  }
+  return new Error(String(error));
+};
 
 export const handleUserSignup = async (
   username: string,
@@ -20,12 +31,9 @@ export const handleUserSignup = async (
       email,
       password,
     });
-
     return response.data;
-  } catch (err: any) {
-    throw new Error(
-      err.response?.data?.msg || err.message || "Signup failed"
-    );
+  } catch (error) {
+    throw normalizeError(error);
   }
 };
 
@@ -38,21 +46,19 @@ export const handleUserLogin = async (
       identifier,
       password,
     });
-
     return response.data;
-  } catch (err: any) {
-    throw new Error(
-      err.response?.data?.msg || err.message || "Login failed"
-    );
+  } catch (error) {
+    throw normalizeError(error);
   }
 };
 
-export const handleUserLogout = async () => {
+export const handleUserLogout = async (): Promise<void> => {
   try {
     await api.post("/auth/logout");
-  } catch (err: any) {
-    throw new Error(
-      err.response?.data?.msg || err.message || "Logout failed"
-    );
+  } catch (error) {
+    throw normalizeError(error);
+  } finally {
+    // Ensure local credentials are cleared even if the server request fails
+    localStorage.removeItem("accessToken");
   }
 };

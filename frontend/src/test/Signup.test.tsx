@@ -88,7 +88,7 @@ describe("Signup", () => {
 
   test("submits form and navigates on success", async () => {
     const mockData = { accessToken: "fake-token" };
-    vi.mocked(handleUserSignup).mockResolvedValue(mockData);
+    (handleUserSignup as vi.Mock).mockResolvedValue(mockData);
 
     renderSignup();
 
@@ -116,7 +116,7 @@ describe("Signup", () => {
 
   test("shows alert on signup failure", async () => {
     const errorMsg = "Username already taken";
-    vi.mocked(handleUserSignup).mockRejectedValue({
+    (handleUserSignup as vi.Mock).mockRejectedValue({
       response: { data: { msg: errorMsg } },
     });
 
@@ -141,7 +141,7 @@ describe("Signup", () => {
   });
 
   test("shows generic alert if error has no response data", async () => {
-    vi.mocked(handleUserSignup).mockRejectedValue(new Error("Network error"));
+    (handleUserSignup as vi.Mock).mockRejectedValue(new Error("Network error"));
 
     renderSignup();
 

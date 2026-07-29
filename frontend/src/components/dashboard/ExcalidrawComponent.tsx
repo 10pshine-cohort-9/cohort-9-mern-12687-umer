@@ -1,6 +1,5 @@
-// src/components/dashboard/ExcalidrawComponent.tsx
 import { NodeViewWrapper, type NodeViewProps } from "@tiptap/react";
-import { Excalidraw } from "@excalidraw/excalidraw";
+import { Excalidraw, type ExcalidrawElement, type AppState } from "@excalidraw/excalidraw";
 import { useEffect, useRef, useCallback } from "react";
 
 export default function ExcalidrawComponent({
@@ -26,8 +25,8 @@ export default function ExcalidrawComponent({
     });
   }, []);
 
-  const onChange = useCallback(
-    (elements: readonly any[], appState: any) => {
+   const onChange = useCallback(
+    (elements: readonly ExcalidrawElement[], appState: AppState) => {
       updateAttributes({
         elements,
         appState: {
