@@ -65,7 +65,7 @@ describe("Dashboard", () => {
   const mockDocDetail = { id: 1, title: "Doc1", content: { type: "doc", content: [{ type: "paragraph", content: [{ text: "Hello" }] }] } };
 
   test("fetches documents on mount and shows loading state", async () => {
-    (getDocuments as vi.Mock).mockResolvedValue(mockDocuments);
+    vi.mocked(getDocuments).mockResolvedValue(mockDocuments);
 
     render(<Dashboard />);
 
@@ -82,7 +82,7 @@ describe("Dashboard", () => {
   });
 
   test("handles fetch error gracefully", async () => {
-    (getDocuments as vi.Mock).mockRejectedValue(new Error("Network error"));
+    vi.mocked(getDocuments).mockRejectedValue(new Error("Network error"));
 
     render(<Dashboard />);
 
@@ -95,8 +95,8 @@ describe("Dashboard", () => {
   });
 
   test("selects a document and loads its content", async () => {
-    (getDocuments as vi.Mock).mockResolvedValue(mockDocuments);
-    (getDocument as vi.Mock).mockResolvedValue(mockDocDetail);
+    vi.mocked(getDocuments).mockResolvedValue(mockDocuments);
+    vi.mocked(getDocument).mockResolvedValue(mockDocDetail);
 
     render(<Dashboard />);
 
@@ -119,8 +119,8 @@ describe("Dashboard", () => {
   });
 
   test("does not refetch document if same id is selected", async () => {
-    (getDocuments as vi.Mock).mockResolvedValue(mockDocuments);
-    (getDocument as vi.Mock).mockResolvedValue(mockDocDetail);
+    vi.mocked(getDocuments).mockResolvedValue(mockDocuments);
+    vi.mocked(getDocument).mockResolvedValue(mockDocDetail);
 
     render(<Dashboard />);
 
@@ -140,8 +140,8 @@ describe("Dashboard", () => {
 
   test("creates a new note", async () => {
     const newDoc = { id: 3, title: "Untitled", content: { type: "doc", content: [{ type: "paragraph" }] } };
-    (getDocuments as vi.Mock).mockResolvedValue(mockDocuments);
-    (createDocument as vi.Mock).mockResolvedValue(newDoc);
+    vi.mocked(getDocuments).mockResolvedValue(mockDocuments);
+    vi.mocked(createDocument).mockResolvedValue(newDoc);
 
     render(<Dashboard />);
 
@@ -164,9 +164,9 @@ describe("Dashboard", () => {
 
   test("saves the current document", async () => {
     const updatedDoc = { ...mockDocDetail, title: "Updated Title" };
-    (getDocuments as vi.Mock).mockResolvedValue(mockDocuments);
-    (getDocument as vi.Mock).mockResolvedValue(mockDocDetail);
-    (updateDocument as vi.Mock).mockResolvedValue(updatedDoc);
+    vi.mocked(getDocuments).mockResolvedValue(mockDocuments);
+    vi.mocked(getDocument).mockResolvedValue(mockDocDetail);
+    vi.mocked(updateDocument).mockResolvedValue(updatedDoc);
 
     render(<Dashboard />);
 
@@ -200,8 +200,8 @@ describe("Dashboard", () => {
   });
 
   test("cancels edits and reverts to original document state", async () => {
-    (getDocuments as vi.Mock).mockResolvedValue(mockDocuments);
-    (getDocument as vi.Mock).mockResolvedValue(mockDocDetail);
+    vi.mocked(getDocuments).mockResolvedValue(mockDocuments);
+    vi.mocked(getDocument).mockResolvedValue(mockDocDetail);
 
     render(<Dashboard />);
 
@@ -229,8 +229,8 @@ describe("Dashboard", () => {
   });
 
   test("deletes a document", async () => {
-    (getDocuments as vi.Mock).mockResolvedValue(mockDocuments);
-    (deleteDocument as vi.Mock).mockResolvedValue(undefined);
+    vi.mocked(getDocuments).mockResolvedValue(mockDocuments);
+    vi.mocked(deleteDocument).mockResolvedValue(undefined);
 
     render(<Dashboard />);
 
@@ -252,9 +252,9 @@ describe("Dashboard", () => {
   });
 
   test("clears selected document after deletion", async () => {
-    (getDocuments as vi.Mock).mockResolvedValue(mockDocuments);
-    (getDocument as vi.Mock).mockResolvedValue(mockDocDetail);
-    (deleteDocument as vi.Mock).mockResolvedValue(undefined);
+    vi.mocked(getDocuments).mockResolvedValue(mockDocuments);
+    vi.mocked(getDocument).mockResolvedValue(mockDocDetail);
+    vi.mocked(deleteDocument).mockResolvedValue(undefined);
 
     render(<Dashboard />);
 
@@ -283,8 +283,8 @@ describe("Dashboard", () => {
   });
 
   test("handles delete error gracefully", async () => {
-    (getDocuments as vi.Mock).mockResolvedValue(mockDocuments);
-    (deleteDocument as vi.Mock).mockRejectedValue(new Error("Delete failed"));
+    vi.mocked(getDocuments).mockResolvedValue(mockDocuments);
+    vi.mocked(deleteDocument).mockRejectedValue(new Error("Delete failed"));
 
     render(<Dashboard />);
 

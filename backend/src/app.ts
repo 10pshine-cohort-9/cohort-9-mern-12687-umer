@@ -27,7 +27,10 @@ app.use(
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
-app.use(pinoHttp({ logger }));
+app.use(pinoHttp({ 
+  logger,
+  redact: ["req.headers.authorization", "req.headers.cookie"]
+}));
 
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/documents", documentRoutes);

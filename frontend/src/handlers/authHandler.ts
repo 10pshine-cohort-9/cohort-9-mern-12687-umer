@@ -1,12 +1,21 @@
 import api from "../api/axios";
 
+export interface AuthResponse {
+  accessToken: string;
+  user?: {
+    id: string;
+    username: string;
+    email: string;
+  };
+}
+
 export const handleUserSignup = async (
   username: string,
   email: string,
   password: string
-) => {
+): Promise<AuthResponse> => {
   try {
-    const response = await api.post("/auth/register", {
+    const response = await api.post<AuthResponse>("/auth/register", {
       username,
       email,
       password,
@@ -23,9 +32,9 @@ export const handleUserSignup = async (
 export const handleUserLogin = async (
   identifier: string,
   password: string
-) => {
+): Promise<AuthResponse> => {
   try {
-    const response = await api.post("/auth/login", {
+    const response = await api.post<AuthResponse>("/auth/login", {
       identifier,
       password,
     });
@@ -45,7 +54,5 @@ export const handleUserLogout = async () => {
     throw new Error(
       err.response?.data?.msg || err.message || "Logout failed"
     );
-  } finally {
-    localStorage.removeItem("accessToken");
   }
 };

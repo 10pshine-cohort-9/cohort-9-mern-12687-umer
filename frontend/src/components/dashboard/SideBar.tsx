@@ -39,6 +39,12 @@ export default function Sidebar({
               key={doc.id}
               role="button"
               tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onSelect(doc.id);
+                }
+              }}
               className={`group flex items-center justify-between rounded-md px-3 py-2 text-sm transition-all outline-none ${
                 isActive
                   ? 'bg-[#313244]/50 text-[#cba6f7] font-medium'
@@ -57,7 +63,7 @@ export default function Sidebar({
                   e.stopPropagation();
                   onDelete(doc.id);
                 }}
-                className="opacity-0 group-hover:opacity-100 text-[#f38ba8] hover:text-[#ffb3c6] transition-all font-mono text-xs"
+                className="opacity-0 group-hover:opacity-100 focus:opacity-100 text-[#f38ba8] hover:text-[#ffb3c6] transition-all font-mono text-xs"
                 title="Delete note"
               >
                 x

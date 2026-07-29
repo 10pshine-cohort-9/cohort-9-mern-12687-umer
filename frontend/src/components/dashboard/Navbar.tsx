@@ -1,16 +1,19 @@
 // src/components/dashboard/Navbar.tsx
 import { handleUserLogout } from "../../handlers/authHandler";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const { logout: clearAuth } = useAuth();
 
-  const logout = async () => {
+  const handleLogout = async () => {
     try {
       await handleUserLogout();
     } catch (err) {
       console.error("Logout failed", err);
     } finally {
+      clearAuth();
       navigate("/");
     }
   };
@@ -31,7 +34,7 @@ export default function Navbar() {
         </span>
         <button
           className="rounded-md border border-[#313244] bg-[#1e1e2e] px-3 py-1 font-mono text-xs text-[#f38ba8] transition hover:bg-[#f38ba8]/10 hover:border-[#f38ba8]"
-          onClick={logout}
+          onClick={handleLogout}
         >
           [ logout ]
         </button>

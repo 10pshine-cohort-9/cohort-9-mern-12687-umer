@@ -9,9 +9,6 @@ import {
     deleteDocumentForUser,
 } from "../services/document.service.js";
 
-// Defense-in-depth: authenticate() already rejects requests with no valid
-// user, so this should never actually throw in normal operation. It's here
-// so a controller never silently trusts req.user.
 function requireUserId(req: Request): number {
     if (!req.user?.userId) {
         throw new AppError(401, "Authentication required.");
@@ -19,7 +16,7 @@ function requireUserId(req: Request): number {
     return Number(req.user.userId);
 }
 
-export async function createDocument(req: Request, res: Response, next: NextFunction) {
+export async function createDocument(req: Request<any, any, { title: string }>, res: Response, next: NextFunction) {
     try {
         const userId = requireUserId(req);
         const { title } = req.body;
@@ -76,7 +73,7 @@ export async function getUserDocumentById(req: Request, res: Response, next: Nex
     }
 }
 
-export async function updateUserDocument(req: Request, res: Response, next: NextFunction) {
+export async function updateUserDocument(req: Request<{ id: string }, any, { title: string, content: any }>, res: Response, next: NextFunction) {
     try {
         const userId = requireUserId(req);
         const { title, content } = req.body;

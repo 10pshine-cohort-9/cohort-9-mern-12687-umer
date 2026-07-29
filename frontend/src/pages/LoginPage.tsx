@@ -2,10 +2,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { handleUserLogin } from "../handlers/authHandler";
+import { useAuth } from "../contexts/AuthContext";
 import { SiArchlinux} from "react-icons/si"
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -13,11 +15,11 @@ export default function Login() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const data = await handleUserLogin(identifier, password);
-      localStorage.setItem("accessToken", data.accessToken);
+      await handleUserLogin(identifier, password);
+      login();
       navigate("/dashboard");
-    } catch (err: any) {
-      alert(err.response?.data?.msg || "Login Failed");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Login Failed");
     }
   };
 

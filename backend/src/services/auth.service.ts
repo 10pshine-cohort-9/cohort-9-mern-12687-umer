@@ -31,7 +31,7 @@ export async function authenticateUser(identifier: string, password: string) {
     });
 
     if (!user) {
-        throw new AppError(404, "Invalid Credentials.");
+        throw new AppError(401, "Invalid credentials.");
     }
 
     const validPassword = await bcrypt.compare(password, user.passwordHash);
@@ -60,6 +60,7 @@ const tokenHash = crypto.createHash("sha256").update(refreshToken).digest("hex")
             expiresAt,
         },
     });
+
 
     return { accessToken, refreshToken };
 }

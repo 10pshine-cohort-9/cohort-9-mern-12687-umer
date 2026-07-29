@@ -3,10 +3,6 @@ import { AppError } from "../utils/AppError.js";
 import type { Prisma } from "../../prisma/generated/prisma/client.js";
 import logger from "./logger.js";
 
-// The TipTap "empty document" shape — every new document gets exactly one
-// RICH_TEXT block seeded with this. v2 adds MARKDOWN / WHITEBOARD / CODE as
-// additional block types; this function and the schema underneath it don't
-// change when that happens.
 const EMPTY_RICH_TEXT_CONTENT = {
     type: "doc",
     content: [{ type: "paragraph" }],
@@ -30,7 +26,7 @@ export async function createDocumentForUser(userId: number, title: string) {
 export async function listDocumentsForUser(userId: number) {
     return prisma.document.findMany({
         where: { userId },
-        include: { blocks: true },
+        include: { blocks: { orderBy: { position: "asc" } } },
         orderBy: { updatedAt: "desc" },
     });
 }
@@ -41,7 +37,7 @@ export async function listDocumentsForUser(userId: number) {
 export async function getDocumentForUser(userId: number, documentId: number) {
     const document = await prisma.document.findFirst({
         where: { id: documentId, userId },
-        include: { blocks: true },
+        include: { blocks: { orderBy: { position: "asc" } } },
     });
 
     if (!document) {
@@ -90,7 +86,8 @@ export async function deleteDocumentForUser(userId: number, documentId: number) 
 }
 
 
-export function getPrimaryContent(document: any): any {
-  // The first RICH_TEXT block's content (null if none)
-  return document.blocks?.[0]?.content ?? null;
+export function getPrimaryContent(
+    document: { blocks?: { content: Prisma.JsonValue }[] }
+): Prisma.JsonValue | null {
+   return document.blocks?.[0]?.content ?? null;
 }

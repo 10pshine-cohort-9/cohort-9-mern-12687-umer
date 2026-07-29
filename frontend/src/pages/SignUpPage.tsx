@@ -2,9 +2,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { handleUserSignup } from "../handlers/authHandler";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Signup() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -13,11 +15,11 @@ export default function Signup() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const data = await handleUserSignup(username, email, password);
-      localStorage.setItem("accessToken", data.accessToken);
+      await handleUserSignup(username, email, password);
+      login();
       navigate("/dashboard");
-    } catch (err: any) {
-      alert(err.response?.data?.msg || "Signup Failed");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Signup Failed");
     }
   };
 
