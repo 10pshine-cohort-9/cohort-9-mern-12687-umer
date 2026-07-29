@@ -2,25 +2,26 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { handleUserLogin } from "../handlers/authHandler";
 import { SiArchlinux } from "react-icons/si";
-import { setAxiosToken } from "../api/axios"; // <-- Import the setter
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
 
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth();
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const data = await handleUserLogin(identifier, password);
       
-      // Store the token in-memory instead of localStorage
-      setAxiosToken(data.accessToken);
+      login(data.user, data.accessToken);
       
       navigate("/dashboard");
     } catch (err: any) {
-      alert(err.response?.data?.msg || "Login Failed");
+      // Use the normalized error message!
+      alert(err instanceof Error ? err.message : "Login Failed");
     }
   };
 

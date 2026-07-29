@@ -1,8 +1,7 @@
-// src/pages/Signup.tsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { handleUserSignup } from "../handlers/authHandler";
-import { setAxiosToken } from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -10,15 +9,17 @@ export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth();
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const data = await handleUserSignup(username, email, password);
-      setAxiosToken(data.accessToken);
+      login(data.user, data.accessToken);
       navigate("/dashboard");
     } catch (err: any) {
-      alert(err.response?.data?.msg || "Signup Failed");
+      // Use the normalized error message!
+      alert(err instanceof Error ? err.message : "Signup Failed");
     }
   };
 

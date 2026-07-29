@@ -1,4 +1,4 @@
-import api from "../api/axios";
+import api, { setAxiosToken } from "../api/axios";
 
 export interface AuthResponse {
   accessToken: string;
@@ -58,7 +58,6 @@ export const handleUserLogout = async (): Promise<void> => {
   } catch (error) {
     throw normalizeError(error);
   } finally {
-    // Ensure local credentials are cleared even if the server request fails
-    localStorage.removeItem("accessToken");
+    setAxiosToken(null);
   }
 };
