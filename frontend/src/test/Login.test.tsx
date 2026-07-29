@@ -21,7 +21,6 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
-
 describe("Login", () => {
   const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
   const setItemSpy = vi.fn();
@@ -63,26 +62,24 @@ describe("Login", () => {
   it("renders the login form", () => {
     renderLogin();
 
-    expect(screen.getByText("Welcome Back")).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText("Username or Email")
-    ).toBeInTheDocument();
-
-    expect(screen.getByPlaceholderText("Password")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "login" })).toBeInTheDocument();
+    
+    expect(screen.getByPlaceholderText("user")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("password")).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: /login/i })
+      screen.getByRole("button", { name: /enter/i })
     ).toBeInTheDocument();
 
-    expect(screen.getByText(/don't have an account/i)).toBeInTheDocument();
-    expect(screen.getByText("Signup")).toBeInTheDocument();
+    expect(screen.getByText(/\[ new session\? \]/i)).toBeInTheDocument();
+    expect(screen.getByText("signup")).toBeInTheDocument();
   });
 
   it("updates input fields", () => {
     renderLogin();
 
-    const identifier = screen.getByPlaceholderText("Username or Email");
-    const password = screen.getByPlaceholderText("Password");
+    const identifier = screen.getByPlaceholderText("user");
+    const password = screen.getByPlaceholderText("password");
 
     fireEvent.change(identifier, {
       target: { value: "testuser" },
@@ -103,16 +100,16 @@ describe("Login", () => {
 
     renderLogin();
 
-    fireEvent.change(screen.getByPlaceholderText("Username or Email"), {
+    fireEvent.change(screen.getByPlaceholderText("user"), {
       target: { value: "testuser" },
     });
 
-    fireEvent.change(screen.getByPlaceholderText("Password"), {
+    fireEvent.change(screen.getByPlaceholderText("password"), {
       target: { value: "password123" },
     });
 
     fireEvent.click(
-      screen.getByRole("button", { name: /login/i })
+      screen.getByRole("button", { name: /enter/i })
     );
 
     await waitFor(() => {
@@ -141,16 +138,16 @@ describe("Login", () => {
 
     renderLogin();
 
-    fireEvent.change(screen.getByPlaceholderText("Username or Email"), {
+    fireEvent.change(screen.getByPlaceholderText("user"), {
       target: { value: "testuser" },
     });
 
-    fireEvent.change(screen.getByPlaceholderText("Password"), {
+    fireEvent.change(screen.getByPlaceholderText("password"), {
       target: { value: "wrong" },
     });
 
     fireEvent.click(
-      screen.getByRole("button", { name: /login/i })
+      screen.getByRole("button", { name: /enter/i })
     );
 
     await waitFor(() => {
@@ -167,16 +164,16 @@ describe("Login", () => {
 
     renderLogin();
 
-    fireEvent.change(screen.getByPlaceholderText("Username or Email"), {
+    fireEvent.change(screen.getByPlaceholderText("user"), {
       target: { value: "testuser" },
     });
 
-    fireEvent.change(screen.getByPlaceholderText("Password"), {
+    fireEvent.change(screen.getByPlaceholderText("password"), {
       target: { value: "password123" },
     });
 
     fireEvent.click(
-      screen.getByRole("button", { name: /login/i })
+      screen.getByRole("button", { name: /enter/i })
     );
 
     await waitFor(() => {

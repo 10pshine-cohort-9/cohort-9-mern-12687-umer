@@ -2,8 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Signup from "../pages/SignUpPage";
 import { handleUserSignup } from "../handlers/authHandler";
-import { describe, expect, vi, beforeEach } from "vitest";
-
+import { describe, test, expect, vi, beforeEach } from "vitest";
 
 vi.mock("../handlers/authHandler", () => ({
   handleUserSignup: vi.fn(),
@@ -45,8 +44,6 @@ Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
 });
 
-
-
 const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
 
 describe("Signup", () => {
@@ -65,20 +62,20 @@ describe("Signup", () => {
 
   test("renders the signup form", () => {
     renderSignup();
-    expect(screen.getByText("Create Your Account")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Username")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Email")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Password")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /create account/i })).toBeInTheDocument();
-    expect(screen.getByText(/Already have an account?/i)).toBeInTheDocument();
-    expect(screen.getByText("Login")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "register" })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("username")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("email")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("password")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /create_user/i })).toBeInTheDocument();
+    expect(screen.getByText(/\[ have access\? \]/i)).toBeInTheDocument();
+    expect(screen.getByText("login")).toBeInTheDocument();
   });
 
   test("updates input fields on change", () => {
     renderSignup();
-    const usernameInput = screen.getByPlaceholderText("Username");
-    const emailInput = screen.getByPlaceholderText("Email");
-    const passwordInput = screen.getByPlaceholderText("Password");
+    const usernameInput = screen.getByPlaceholderText("username");
+    const emailInput = screen.getByPlaceholderText("email");
+    const passwordInput = screen.getByPlaceholderText("password");
 
     fireEvent.change(usernameInput, { target: { value: "johndoe" } });
     fireEvent.change(emailInput, { target: { value: "john@example.com" } });
@@ -95,25 +92,25 @@ describe("Signup", () => {
 
     renderSignup();
 
-    fireEvent.change(screen.getByPlaceholderText("Username"), {
+    fireEvent.change(screen.getByPlaceholderText("username"), {
       target: { value: "johndoe" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Email"), {
+    fireEvent.change(screen.getByPlaceholderText("email"), {
       target: { value: "john@example.com" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Password"), {
+    fireEvent.change(screen.getByPlaceholderText("password"), {
       target: { value: "secret123" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /create account/i }));
+    fireEvent.click(screen.getByRole("button", { name: /create_user/i }));
 
     await waitFor(() => {
       expect(handleUserSignup).toHaveBeenCalledWith("johndoe", "john@example.com", "secret123");
     });
 
     await waitFor(() => {
-  expect(setItemSpy).toHaveBeenCalledWith('accessToken', 'fake-token');
-});
+      expect(setItemSpy).toHaveBeenCalledWith('accessToken', 'fake-token');
+    });
     expect(mockNavigate).toHaveBeenCalledWith("/dashboard");
   });
 
@@ -125,17 +122,17 @@ describe("Signup", () => {
 
     renderSignup();
 
-    fireEvent.change(screen.getByPlaceholderText("Username"), {
+    fireEvent.change(screen.getByPlaceholderText("username"), {
       target: { value: "takenuser" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Email"), {
+    fireEvent.change(screen.getByPlaceholderText("email"), {
       target: { value: "taken@example.com" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Password"), {
+    fireEvent.change(screen.getByPlaceholderText("password"), {
       target: { value: "password" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /create account/i }));
+    fireEvent.click(screen.getByRole("button", { name: /create_user/i }));
 
     await waitFor(() => {
       expect(alertMock).toHaveBeenCalledWith(errorMsg);
@@ -148,17 +145,17 @@ describe("Signup", () => {
 
     renderSignup();
 
-    fireEvent.change(screen.getByPlaceholderText("Username"), {
+    fireEvent.change(screen.getByPlaceholderText("username"), {
       target: { value: "test" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Email"), {
+    fireEvent.change(screen.getByPlaceholderText("email"), {
       target: { value: "test@example.com" },
     });
-    fireEvent.change(screen.getByPlaceholderText("Password"), {
+    fireEvent.change(screen.getByPlaceholderText("password"), {
       target: { value: "password" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /create account/i }));
+    fireEvent.click(screen.getByRole("button", { name: /create_user/i }));
 
     await waitFor(() => {
       expect(alertMock).toHaveBeenCalledWith("Signup Failed");

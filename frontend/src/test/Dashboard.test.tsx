@@ -7,12 +7,10 @@ import {
   updateDocument,
   deleteDocument,
 } from "../handlers/documentHandler";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-
-
+import { describe, test, expect, vi, beforeEach } from "vitest";
 
 // Mock child components to isolate Dashboard logic
-vi.mock("../components/dashboard/navbar", () => ({
+vi.mock("../components/dashboard/Navbar", () => ({
   default: () => <div>Navbar</div>,
 }));
 vi.mock("../components/dashboard/SideBar", () => ({
@@ -30,7 +28,6 @@ vi.mock("../components/dashboard/SideBar", () => ({
     <div>Selected: {selectedId}</div>
   </div>
 )}));
-
 
 vi.mock("../components/dashboard/NoteEditor", () => ({ 
   default: ({title, content, onTitleChange, onContentChange, onSave, onCancel, saving }: any) => (
@@ -73,11 +70,11 @@ describe("Dashboard", () => {
     render(<Dashboard />);
 
     // Initially shows loading
-    expect(screen.getByText("Loading…")).toBeInTheDocument();
+    expect(screen.getByText("[ loading_buffer... ]")).toBeInTheDocument();
 
     // After fetch, loading disappears and documents are shown
     await waitFor(() => {
-      expect(screen.queryByText("Loading…")).not.toBeInTheDocument();
+      expect(screen.queryByText("[ loading_buffer... ]")).not.toBeInTheDocument();
     });
     expect(screen.getByText("Doc1")).toBeInTheDocument();
     expect(screen.getByText("Doc2")).toBeInTheDocument();
@@ -90,7 +87,7 @@ describe("Dashboard", () => {
     render(<Dashboard />);
 
     await waitFor(() => {
-      expect(screen.queryByText("Loading…")).not.toBeInTheDocument();
+      expect(screen.queryByText("[ loading_buffer... ]")).not.toBeInTheDocument();
     });
     // No documents are shown
     expect(screen.queryByText("Doc1")).not.toBeInTheDocument();
@@ -104,7 +101,7 @@ describe("Dashboard", () => {
     render(<Dashboard />);
 
     await waitFor(() => {
-      expect(screen.queryByText("Loading…")).not.toBeInTheDocument();
+      expect(screen.queryByText("[ loading_buffer... ]")).not.toBeInTheDocument();
     });
 
     // Click on document title
@@ -128,7 +125,7 @@ describe("Dashboard", () => {
     render(<Dashboard />);
 
     await waitFor(() => {
-      expect(screen.queryByText("Loading…")).not.toBeInTheDocument();
+      expect(screen.queryByText("[ loading_buffer... ]")).not.toBeInTheDocument();
     });
 
     // Select Doc1 twice
@@ -149,7 +146,7 @@ describe("Dashboard", () => {
     render(<Dashboard />);
 
     await waitFor(() => {
-      expect(screen.queryByText("Loading…")).not.toBeInTheDocument();
+      expect(screen.queryByText("[ loading_buffer... ]")).not.toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByText("New Note"));
@@ -174,7 +171,7 @@ describe("Dashboard", () => {
     render(<Dashboard />);
 
     await waitFor(() => {
-      expect(screen.queryByText("Loading…")).not.toBeInTheDocument();
+      expect(screen.queryByText("[ loading_buffer... ]")).not.toBeInTheDocument();
     });
 
     // Select Doc1
@@ -186,7 +183,7 @@ describe("Dashboard", () => {
     // Change title and content
     const titleInput = screen.getByPlaceholderText("Title");
     fireEvent.change(titleInput, { target: { value: "Updated Title" } });
-const contentTextarea = screen.getAllByRole("textbox")[1];
+    const contentTextarea = screen.getAllByRole("textbox")[1];
     const newContent = { type: "doc", content: [{ type: "paragraph", content: [{ text: "New content" }] }] };
     fireEvent.change(contentTextarea, { target: { value: JSON.stringify(newContent) } });
 
@@ -209,7 +206,7 @@ const contentTextarea = screen.getAllByRole("textbox")[1];
     render(<Dashboard />);
 
     await waitFor(() => {
-      expect(screen.queryByText("Loading…")).not.toBeInTheDocument();
+      expect(screen.queryByText("[ loading_buffer... ]")).not.toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByText("Doc1"));
@@ -219,7 +216,7 @@ const contentTextarea = screen.getAllByRole("textbox")[1];
 
     const titleInput = screen.getByPlaceholderText("Title");
     fireEvent.change(titleInput, { target: { value: "Changed" } });
-    const contentTextarea =screen.getAllByRole("textbox")[1];
+    const contentTextarea = screen.getAllByRole("textbox")[1];
     const originalContent = mockDocDetail.content;
     fireEvent.change(contentTextarea, { target: { value: JSON.stringify({ type: "doc", content: [{ type: "paragraph", content: [{ text: "Changed" }] }] }) } });
 
@@ -238,7 +235,7 @@ const contentTextarea = screen.getAllByRole("textbox")[1];
     render(<Dashboard />);
 
     await waitFor(() => {
-      expect(screen.queryByText("Loading…")).not.toBeInTheDocument();
+      expect(screen.queryByText("[ loading_buffer... ]")).not.toBeInTheDocument();
     });
 
     // Click delete on Doc1
@@ -252,8 +249,6 @@ const contentTextarea = screen.getAllByRole("textbox")[1];
     // Doc1 is removed from list
     expect(screen.queryByText("Doc1")).not.toBeInTheDocument();
     expect(screen.getByText("Doc2")).toBeInTheDocument();
-    // Selected is cleared (assuming Doc1 was selected? But we didn't select it, so it's null)
-    // We can test selection clearing by selecting first then deleting.
   });
 
   test("clears selected document after deletion", async () => {
@@ -264,7 +259,7 @@ const contentTextarea = screen.getAllByRole("textbox")[1];
     render(<Dashboard />);
 
     await waitFor(() => {
-      expect(screen.queryByText("Loading…")).not.toBeInTheDocument();
+      expect(screen.queryByText("[ loading_buffer... ]")).not.toBeInTheDocument();
     });
 
     // Select Doc1
@@ -282,7 +277,7 @@ const contentTextarea = screen.getAllByRole("textbox")[1];
     });
 
     // Editor should show placeholder
-    expect(screen.getByText("Select or create a note to start writing.")).toBeInTheDocument();
+    expect(screen.getByText("Select a note to edit")).toBeInTheDocument();
     // Title and content cleared
     expect(screen.queryByPlaceholderText("Title")).not.toBeInTheDocument();
   });
@@ -294,7 +289,7 @@ const contentTextarea = screen.getAllByRole("textbox")[1];
     render(<Dashboard />);
 
     await waitFor(() => {
-      expect(screen.queryByText("Loading…")).not.toBeInTheDocument();
+      expect(screen.queryByText("[ loading_buffer... ]")).not.toBeInTheDocument();
     });
 
     const deleteButtons = screen.getAllByText("Delete");
