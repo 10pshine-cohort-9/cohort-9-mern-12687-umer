@@ -39,7 +39,11 @@ export default function Login() {
 
         <div className="space-y-3 font-mono text-sm">
           <div className="relative">
+            <label htmlFor="login-identifier" className="block font-mono text-sm text-[#94e2d5] mb-1">
+              identifier
+            </label>
             <input
+              id="login-identifier"
               type="text"
               placeholder="user"
               value={identifier}
@@ -49,7 +53,11 @@ export default function Login() {
           </div>
 
           <div className="relative">
+            <label htmlFor="login-password" className="block font-mono text-sm text-[#94e2d5] mb-1">
+              password
+            </label>
             <input
+              id="login-password"
               type="password"
               placeholder="password"
               value={password}

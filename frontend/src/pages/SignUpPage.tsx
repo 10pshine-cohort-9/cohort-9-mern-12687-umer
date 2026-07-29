@@ -34,28 +34,46 @@ export default function Signup() {
         </div>
 
         <div className="space-y-3 font-mono text-sm">
-          <input
-            placeholder="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
-          />
+          <div className="relative">
+            <label htmlFor="signup-username" className="block font-mono text-sm text-[#94e2d5] mb-1">
+              username
+            </label>
+            <input
+              id="signup-username"
+              placeholder="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
+            />
+          </div>
 
-          <input
-            type="email"
-            placeholder="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
-          />
+          <div className="relative">
+            <label htmlFor="signup-email" className="block font-mono text-sm text-[#94e2d5] mb-1">
+              email
+            </label>
+            <input
+              id="signup-email"
+              type="email"
+              placeholder="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
+            />
+          </div>
 
-          <input
-            type="password"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
-          />
+          <div className="relative">
+            <label htmlFor="signup-password" className="block font-mono text-sm text-[#94e2d5] mb-1">
+              password
+            </label>
+            <input
+              id="signup-password"
+              type="password"
+              placeholder="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded-lg bg-[#181825] border border-[#313244] text-[#cdd6f4] placeholder:text-[#45475a] px-4 py-2.5 outline-none transition focus:border-[#89b4fa] focus:ring-1 focus:ring-[#89b4fa]"
+            />
+          </div>
         </div>
 
         <button
